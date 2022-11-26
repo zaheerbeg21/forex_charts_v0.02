@@ -1,0 +1,58 @@
+#prediction_tbl {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #prediction_tbl td, #prediction_tbl th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #prediction_tbl tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #prediction_tbl tr:hover {background-color: #ddd;}
+  
+  #prediction_tbl th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04AA6D;
+    color: white;
+  }
+
+  
+  #hist_table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    overflow:auto;
+  }
+  
+  #hist_table td, #prediction_tbl th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #hist_table tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #hist_table tr:hover {background-color: #ddd;}
+  
+  #hist_table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #04AA6D;
+    color: black;
+  }
+
+  #current_price {
+    border: 2px solid;
+    padding: 20px;
+    width: 250px;
+    resize: horizontal;
+    overflow: auto;
+   color:blue;
+  }
+  
+  

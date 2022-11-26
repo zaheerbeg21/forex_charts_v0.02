@@ -1,0 +1,187 @@
+body {
+    font-family: Poppins;
+  }
+  
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+  }
+  
+  .card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  
+/* MISCELLANEOUS START */
+
+.small-name {
+    font-size: 15px;
+    margin: 0px;
+}
+
+.big-name {
+    margin: 0px;
+    font-size: 30px;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.left-text {
+    text-align: left;
+}
+
+.right-text {
+    text-align: right;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+/* MISCELLANEOUS END */
+
+.container-form {
+    display: flex;
+    margin: 20px 100px;
+}
+
+.bt-table {
+    width: 100%;
+    text-align: center;
+}
+
+.bt-heading {
+    text-align: center;
+    font-size: 25px;
+    padding: 10px 20px;
+}
+
+.form-item {
+    padding: 15px 30px;
+    /* width: 100%; */
+    /* display: flex;
+    flex-direction: column; */
+    /* padding-bottom: 15px; */
+}
+
+.form-heading {
+    font-size: 15px;
+    margin: 3px;
+}
+
+input select {
+    font-size: 20px;
+}
+
+input[type="text"] {
+    font-size: 20px;
+    padding: 10px;
+    width: calc(100% - 40px);
+}
+
+input[type="date"], input[type="submit"] {
+    /* width: calc(100% - 70px); */
+    width: 70%;
+    font-size: 20px;
+    padding: 10px;
+    font-family: Poppins;
+}
+
+select {
+    padding: 10px;  
+    width: 70%;
+    font-size: 20px;
+}
+
+/* input[type="button"] {
+    width: 40%;
+} */
+
+/* .form-item-submit {
+    padding-top: 50px;
+} */
+
+
+.report-status {
+    margin: 10px 100px;
+
+}
+.current_price {
+    margin: 10px 10px;
+    background-color: orange;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    min-width: 50px;
+}
+
+.current_price_row{
+justify-content: space-between;
+}
+
+.rs-heading, .rs-data {
+    padding: 10px 20px;
+}
+
+.status-done, .status-error, .status-process {
+    background-color: green;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    min-width: 50px;
+    max-width: 80px;
+    /* width: 85px; */
+}
+
+.status-error {
+    background-color: red;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.status-process {
+    background-color: orange;
+}
+
+.comment-error {
+    /* text-overflow: ellipsis; */
+    /* white-space: nowrap; */
+    /* overflow: hidden; */
+    width: 500px;
+}
+
+
+
+.status-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.status {
+    padding: 20px;
+    margin: 10px;
+}
+
+.guage_card {
+    padding: 20px;
+    margin: 10px;
+    text-align: center;
+}
+
+.report-status-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+.status-percentage {
+    font-weight: bold;
+    font-size: 18px;
+}

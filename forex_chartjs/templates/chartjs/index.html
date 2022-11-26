@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>chatsjs</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src='https://cdn.plot.ly/plotly-2.16.1.min.js'></script>
+
+
+</head>
+
+<body class="container-fluid">
+<center class="row">
+    <h1>implementation of <b>chartJS</b> using <b>django</b></h1>
+</center>
+<hr/>
+<div class="row">
+    <div class="col-md-6">
+        <canvas id="myChartline"></canvas>
+    </div>
+    <div class="col-md-6">
+        <canvas id="myChartBar"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+	<div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+
+	<div>
+		<script>
+			var data = [
+	{
+		domain: { x: [0, 0.5], y: [0.5, 1] },
+		value: 100,
+		title: { text: "BUY" },
+		type: "indicator",
+		mode: "gauge+number"
+	}
+];
+
+var layout = { width: 500, height: 500, margin: { t: 1, b: 1 } };
+Plotly.newPlot('myDiv', data, layout);
+		</script>
+	</div>
+</body>
+
+</html>

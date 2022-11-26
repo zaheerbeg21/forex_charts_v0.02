@@ -1,0 +1,79 @@
+{% load static %}
+<html>
+
+<head>
+    <title>Dashboard | Report</title>
+    <link rel="stylesheet" href="{% static 'report.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins" />
+</head>
+
+<body>
+    <div class="report-container" id="recent-report-container">
+        {% block report-card %}
+        <!-- Recent Report Table -->
+        <div class="card last-report" id="recent-report-card">
+            <table class="recent-report">
+                <th colspan="2" class="recent-heading">Recent Report Details</th>
+                <tr class="recent-row">
+                    <td class="recent-data">
+                        <p class="small-name">Currency</p>
+                        <p class="big-name">{{last_report.currency_id}}</p>
+                    </td>
+                    <td class="recent-data">
+                        <p class="small-name">Interval</p>
+                        <p class="big-name">{{last_report.interval_id}} Minutes</p>
+                    </td>
+                </tr>
+                <tr class="recent-row">
+                    <td class="recent-data">
+                        <p class="small-name">From Date</p>
+                        <p class="big-name">{{last_report.from_date|date:'Y-m-d'}}</p>
+                    </td>
+                    <td class="recent-data">
+                        <p class="small-name">To Date</p>
+                        <p class="big-name">{{last_report.to_date|date:'Y-m-d'}}</p>
+                    </td>
+                </tr>
+                <tr class="recent-row-percentage">
+                    <td colspan="2" class="percent-border-bottom">
+                        <p class="small-name">Percentage</p>
+                        {{last_report.percentage | floatformat:"-2"}}%
+                    </td>
+                </tr>
+                <tr class="recent-row-date-time">
+                    <td colspan="2">
+                        {{last_report.report_date_time}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        {% endblock %}
+
+        <!-- Report Table -->
+        <div class="card report-table" id="report-card">
+            <table>
+                <th colspan="6" class="recent-heading">Report Details</th>
+                <tr class="report-row">
+                    <th class="report-heading left-text">Currency</th>
+                    <th class="report-heading left-text">Interval</th>
+                    <th class="report-heading left-text">From Date</th>
+                    <th class="report-heading left-text">To Date</th>
+                    <th class="report-heading left-text">Percentage</th>
+                    <th class="report-heading left-text">Report Date Time</th>
+                </tr>
+                {% for r in reports %}
+                <tr class="report-row">
+                    <td class="report-data">{{r.currency_id}}</td>
+                    <td class="report-data">{{r.interval_id}}</td>
+                    <td class="report-data">{{r.from_date}}</td>
+                    <td class="report-data">{{r.to_date}}</td>
+                    <td class="report-data right-text">{{r.percentage | floatformat:"-2" }}</td>
+                    <td class="report-data">{{r.report_date_time}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

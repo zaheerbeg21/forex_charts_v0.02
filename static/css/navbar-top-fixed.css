@@ -1,0 +1,37 @@
+/* Show it is fixed to the top */
+body {
+  min-height: 75rem;
+  padding-top: 4.5rem;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* current price only */
+.bold-text {
+  font-weight: bold;
+}
+.current_price {
+  margin: 10px 10px;
+  background-color: orange;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  min-width: 50px;
+}
+
+.current_price_row{
+justify-content: space-between;
+}
+
+.center-text {
+  text-align: center;
+}
+
+/* current price only ends*/

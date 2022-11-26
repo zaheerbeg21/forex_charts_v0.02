@@ -1,0 +1,77 @@
+.gauge-mask {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    height: 6.25em;
+    font-size: 16px;
+    font-family: Hkgrotesk;
+  }
+  @media screen and (min-width: 320px) and (max-width: 475px) {
+    .gauge-mask {
+      font-size: 10.4px;
+    }
+  }
+  .gauge-semi-circle {
+    position: relative;
+    width: 12.5em;
+    height: 6.25em;
+    background: linear-gradient(
+      to right,
+      #ff3511 6%,
+      #d4791b 19%,
+      #fff00b 51%,
+      #02bd6d 95%
+    );
+    border-radius: 50% 50% 50% 50% / 100% 100% 0 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .gauge-semi-circle::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    z-index: 2;
+    display: block;
+    width: 11.25em;
+    height: 5.625em;
+    margin-left: -5.625em;
+    background: #f8f8f8;
+    border-radius: 50% 50% 50% 50% / 100% 100% 0% 0%;
+  }
+  .gauge-semi-circle--mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12.5em;
+    height: 12.5em;
+    background: transparent;
+    transform-origin: center center;
+    backface-visibility: hidden;
+    animation: rotating 1s ease-out forwards;
+  }
+  .semi-circle-percentage {
+    z-index: 10;
+    font-size: 1.8em;
+  }
+  @keyframes rotating {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(100deg);
+    }
+  }
+  .gauge-semi-circle--mask::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0%;
+    z-index: 2;
+    display: block;
+    width: 12.625em;
+    height: 6.375em;
+    margin: -1px 0 0 -1px;
+    background: #e9e9e9;
+    border-radius: 50% 50% 50% 50% / 100% 100% 0% 0%;

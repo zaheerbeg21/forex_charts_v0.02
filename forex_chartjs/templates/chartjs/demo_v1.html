@@ -1,0 +1,581 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Forex Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src = "https://code.highcharts.com/highcharts.js"></script>    
+    <script src = "https://code.highcharts.com/highcharts-more.js"></script>
+      <script src = "https://code.highcharts.com/modules/solid-gauge.js"></script>
+    <script src='https://cdn.plot.ly/plotly-2.16.1.min.js'></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+    crossorigin="anonymous"/>
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/guage.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar-top-fixed.css' %}"/>
+   
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Forex</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              <li class="nav-item">
+                <a class="nav-link" href="#">Dashboard</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link"  href="{% url 'index' %}">Back Testing</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+</nav>
+<form id="refresh_data">
+<br>
+<br>
+<br>
+<br>
+<main class="col-md-12 col-sm-12 col-lg-12 col-md-12">
+<div class="row">
+    <div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
+        <div class="form-item">
+            <p class="form-heading">
+                Select Live Forex Data
+            </p>
+            <select class="custom-select" style="width:150px" name="method_" id="method_">
+              {% comment %} <option value="-1">-- SELECT --</option> {% endcomment %}
+              <option value="0">MetaTrader</option>
+              <option value="1">Free Api</option>
+              <option value="2">TradeMade</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
+        <div class="form-item">
+           <p class="form-heading"> Select Currency </p>
+
+           <!-- Use the custom-select class -->
+           <select class="custom-select" style="width:150px" name="currency" id="currency">
+             <option value="default">-- SELECT --</option>
+               {% for i in Get_currency%}
+               <option value="{{i.currency_name}}"> {{i.currency_name}}</option>
+               {% endfor %}
+           </select>
+       </div>
+    </div>
+    <div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
+        <div class="form-item">
+            <p class="form-heading"> Select Time Interval </p>
+            <select class="custom-select" style="width:150px" name="interval" id="interval">
+              <option value="default">-- SELECT --</option>
+                {% for i in Get_interval%}
+                <option value="{{i.minutes}}">{{i.minutes}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
+      <div class="card status">
+          <div class="current_price_row">
+              <div class="current_price bold-text center-text">Current Price</div>
+          </div>
+          <div id = "para_current_price" class="center-text bold-text">{{current_price}}</div>
+      </div>
+  </div>
+	<div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
+      <div id ="myDiv_buy" style ="width:300px; height:150px;"></div>
+   </div>
+   <div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
+      <div id='myDiv_sell' style="width:300px; height:150px;"></div>
+   </div>
+</div>
+
+</main>
+
+<script> 
+   // var buy_gauge = document.getElementById("myDiv_buy");
+    var chart = {      
+      type: 'solidgauge'
+   };
+   var title = null;
+   
+   var pane = {
+      center: ['50%', '85%'],
+      size: '120%',
+      startAngle: -90,
+      endAngle: 90,
+      
+      background: {
+         backgroundColor: (
+            Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+         
+         innerRadius: '60%',
+         outerRadius: '100%',
+         shape: 'arc'
+      }
+   };
+   var tooltip = {
+      enabled: false
+   };
+   
+   // the value axis
+   var yAxis = {
+      stops: [
+         [0.1, '#55BF3B'], // green
+         [0.5, '#DDDF0D'], // yellow
+         [0.9, '#DF5353'] // red
+      ],
+      lineWidth: 0,
+      minorTickInterval: null,
+      tickPixelInterval: 400,
+      tickWidth: 0,
+      title: {
+         y: -70
+      },
+      labels: {
+         y: 16
+      },
+      min: 0,
+      max: 200,
+      title: {
+         text: 'Buy%'
+      }
+   };
+   var plotOptions = {
+      solidgauge: {
+         dataLabels: {
+            y: 5,
+            borderWidth: 0,
+            useHTML: true
+         }
+      }
+   };
+   var credits = {
+      enabled: false
+   };
+   
+   var data_buy = "0";
+
+   var int_val = parseInt(data_buy, 10);
+   console.log(int_val);
+
+
+   var series = [{
+      name: 'Buy',
+      data: [int_val],
+      
+       
+      dataLabels: {
+         format: '<div style = "text-align:center"><span style = "font-size:20px;color:' +
+            ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') +
+            '">{y}</span><br/>' +
+            '<span style = "font-size:12px;color:silver">Buy%</span></div>'
+      },
+      tooltip: {
+         valueSuffix: 'Buy%'
+      }
+   }];
+
+   var json = {};   
+   json.chart = chart; 
+   json.title = title;       
+   json.pane = pane; 
+   json.tooltip = tooltip; 
+   json.yAxis = yAxis; 
+   json.credits = credits; 
+   json.series = series;     
+   $('#myDiv_buy').highcharts(json);   
+  </script>
+      
+
+
+    </div>
+ 
+    </div>
+    <script> 
+         
+      var chart = {      
+        type: 'solidgauge'
+     };
+     var title = null;
+     
+     var pane = {
+        center: ['50%', '85%'],
+        size: '120%',
+        startAngle: -90,
+        endAngle: 90,
+        
+        background: {
+           backgroundColor: (
+              Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+           
+           innerRadius: '60%',
+           outerRadius: '100%',
+           shape: 'arc'
+        }
+     };
+     var tooltip = {
+        enabled: false
+     };
+     
+     // the value axis
+     var yAxis = {
+        stops: [
+           [0.1, '#55BF3B'], // green
+           [0.5, '#DDDF0D'], // yellow
+           [0.9, '#DF5353'] // red
+        ],
+        lineWidth: 0,
+        minorTickInterval: null,
+        tickPixelInterval: 400,
+        tickWidth: 0,
+        title: {
+           y: -70
+        },
+        labels: {
+           y: 16
+        },
+        min: 0,
+        max: 200,
+        title: {
+           text: 'Sell%'
+        }
+     };
+     var plotOptions = {
+        solidgauge: {
+           dataLabels: {
+              y: 5,
+              borderWidth: 0,
+              useHTML: true
+           }
+        }
+     };
+     var credits = {
+        enabled: false
+     };
+     
+     var data_buy = "0";
+
+     var int_val = parseInt(data_buy, 10);
+     console.log(int_val);
+
+
+  
+     var series = [{
+        name: 'Sell',
+        data: [int_val],
+        
+         
+        dataLabels: {
+           format: '<div style = "text-align:center"><span style = "font-size:20px;color:' +
+              ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') +
+              '">{y}</span><br/>' +
+              '<span style = "font-size:12px;color:silver">Sell%</span></div>'
+        },
+        tooltip: {
+           valueSuffix: 'Sell%'
+        }
+     }];
+
+     var json = {};   
+     json.chart = chart; 
+     json.title = title;       
+     json.pane = pane; 
+     json.tooltip = tooltip; 
+     json.yAxis = yAxis; 
+     json.credits = credits; 
+     json.series = series;     
+     $('#myDiv_sell').highcharts(json);   
+     
+
+      
+    </script>
+    {% comment %} table {% endcomment %}
+
+<main class="col-md-12 ms-sm-auto col-lg-12 px-md-12">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+        <h1 class="h2">Forex Currency Prediction</h1>
+        <div class="btn-toolbar mb-2 mb-md-0"></div>
+      </div>
+    <div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+        <tr>
+            <th scope="col">Currency</th>
+            <th scope="col">Time Interval</th>
+            <th scope="col">High</th>
+            <th scope="col">High Prediction</th>
+            <th scope="col">Date Time Hit High</th>
+            <th scope="col">Low</th>
+            <th scope="col">Low Prediction</th>
+            <th scope="col">Date Time Hit Low</th>
+        </tr>
+        </thead>
+        <tbody id = "pred_tbl_body">
+        {% for i in result_high_low %}
+        <tr>
+            {% for j in i %}
+            <td>{{j}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+        <h1 class="h2">History Prediction Table</h1>
+        <div class="btn-toolbar mb-2 mb-md-0"></div>
+      </div>
+      <div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+        <tr>
+            <th scope="col">Current Time</th>
+            <th scope="col">Currency</th>
+            <th scope="col">Time Interval</th>
+            <th scope="col">Actual High</th>
+            <th scope="col">Actual Low</th>
+            <th scope="col">Predicted High</th>
+            <th scope="col">Predicted Low</th>
+            <th scope="col">Target DateTime</th>
+            <th scope="col">DateTime Hit High</th>
+            <th scope="col">DateTime Hit Low</th>
+        </tr>
+        </thead>
+        <tbody id ="hist_tbl_body">
+        {% for i in result_historical %}
+        <tr>
+            {% for j in i %}
+            <td>{{j}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</main>
+</form>
+
+<script>
+let queryParams = new URLSearchParams(window.location.search);
+
+let currency_ = queryParams.get("currency"); // return john
+let interval = queryParams.get("interval"); // return sales
+
+if (currency_ == null){
+const dd = document.getElementById ('currency');
+dd.selectedIndex = [...dd.options].findIndex (option => option.text === "-- SELECT --");
+}
+else{
+const dd = document.getElementById ('currency');
+dd.selectedIndex = [...dd.options].findIndex (option => option.text === currency_);
+}
+
+if (interval == null){
+const dd = document.getElementById ('interval');
+dd.selectedIndex = [...dd.options].findIndex (option => option.text === "-- SELECT --");
+}
+else{
+const dd = document.getElementById ('interval');
+dd.selectedIndex = [...dd.options].findIndex (option => option.text === interval);
+}
+
+
+var PAGE_URL = "http://127.0.0.1:8000/home/"
+console.log("This is started");
+var $selectSeries = $('#currency');
+console.log($selectSeries);
+$selectEpisode = $('#interval');
+$episodeOptions = $selectEpisode.find('option');
+// <!--  $tbody = $('#results tbody');-->
+// <!--  $rows = $tbody.find('tr');-->
+
+var params;
+var params_;
+
+function onSeriesChange() {
+console.log("This is Seires change currency");
+  var selectedSeries = $selectSeries.val() || '';
+  var selectedEpisode = $selectEpisode.val() || '';
+  console.log(selectedSeries);
+  console.log("-----"+selectedEpisode);
+  params = "?currency="+selectedSeries;
+
+  console.log(params);
+  window.location.replace(PAGE_URL+params);
+}
+
+function onEpisodeChange() {
+console.log("This is Seires change currency");
+  var selectedSeries = $selectSeries.val() || '';
+  var selectedEpisode = $selectEpisode.val() || '';
+  console.log(selectedSeries);
+  console.log("-----"+selectedEpisode);
+  params = "?currency="+selectedSeries+"&interval="+selectedEpisode;
+
+  console.log(params);
+  window.location.replace(PAGE_URL+params)
+}
+
+$selectSeries.on('change', onSeriesChange);
+$selectEpisode.on('change', onEpisodeChange);
+</script>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+$(document).ready(function () {
+            // catch the form's submit event
+            $("#currency").change(function ()
+            {
+            var ajaxInterval = setInterval(function(){AjaxCurrentPrice_timer()},200);
+                // create an AJAX call
+            });
+        })
+
+$(document).ready(function () {
+            // catch the form's submit event
+            $("#interval").change(function ()
+            {
+            var ajaxInterval = setInterval(function(){AjaxCurrentPrice_timer()},200);
+                // create an AJAX call
+            });
+        })
+
+
+var ajaxInterval = setInterval(function(){AjaxCurrentPrice_timer()},200);
+		function AjaxCurrentPrice_timer()
+		{
+			$.ajax({
+				data: $("#refresh_data").serializeArray(),
+				async: true,
+				url: "{% url 'get_currency' %}",
+                    // on success
+                success: function (response) {
+
+                        // document.getElementById("custom-select").value = response.method;
+                         console.log("Inside Get Current price data");
+
+                        var element = document.getElementById("para_current_price");
+                        element.innerHTML = response.current_price;
+
+                        var pred_tbl_body = document.getElementById("pred_tbl_body");
+                        console.log(response.result_high_low.length);
+                        var table_data = '';
+                        for(var i = 0; i < response.result_high_low.length; i++) {
+                             var temp1 = "<tr><td>"+response.result_high_low[i][0]+"</td>";
+                             temp1 += "<td>"+response.result_high_low[i][1]+"</td>";
+                             if (response.result_high_low[i][2] == "" || response.result_high_low[i][2] == null){
+                                temp1 += "<td>No Data</td>";
+                             }
+                             else
+                             {
+                                temp1 += "<td>"+response.result_high_low[i][2]+"</td>";
+                             }
+                             temp1 += "<td>"+response.result_high_low[i][3]+"</td>";
+
+                             if (response.result_high_low[i][4] == "" || response.result_high_low[i][4] == null){
+                                temp1 += "<td>No Data Hit</td>";
+                             }
+                             else
+                             {
+                                temp1 += "<td>"+response.result_high_low[i][4]+"</td>";
+                             }
+
+                             if (response.result_high_low[i][5] == "" || response.result_high_low[i][5] == null){
+                                temp1 += "<td>No Data</td>";
+                             }
+                             else
+                             {
+                                temp1 += "<td>"+response.result_high_low[i][5]+"</td>";
+                             }
+
+                             temp1 += "<td>"+response.result_high_low[i][6]+"</td>";
+                             temp1 += "<td>"+response.result_high_low[i][7]+"</td></tr>";
+                            table_data = table_data+temp1;
+                        }
+                        pred_tbl_body.innerHTML = table_data;
+
+                        var result_historical_ = document.getElementById("hist_tbl_body");
+                        table_data = '';
+                        for(var i = 0; i < response.result_historical.length; i++) {
+                             var temp1 = "<tr><td>"+response.result_historical[i][0]+"</td>";
+                             temp1 += "<td>"+response.result_historical[i][1]+"</td>";
+                             temp1 += "<td>"+response.result_historical[i][2]+"</td>";
+                             temp1 += "<td>"+response.result_historical[i][3]+"</td>";
+                             temp1 += "<td>"+response.result_historical[i][4]+"</td>";
+                             temp1 += "<td>"+response.result_historical[i][5]+"</td>";
+                             temp1 += "<td>"+response.result_historical[i][6]+"</td>";
+                             temp1 += "<td>"+response.result_historical[i][7]+"</td>";
+                             temp1 += "<td>"+response.result_historical[i][8]+"</td>";
+                             temp1 += "<td>"+response.result_historical[i][9]+"</td></tr>";
+                            table_data = table_data+temp1;
+                        }
+                        result_historical_.innerHTML = table_data;
+                        
+      
+                       
+                  
+									   
+						 var data_buy = response.result_buy;
+					
+						 var int_val = parseInt(data_buy, 10);
+						 console.log(int_val);
+						 data_buy = response.result_sell;
+					
+						 var sell_val = parseInt(data_buy, 10);
+						 console.log(sell_val);
+
+
+						var index = document.getElementById('myDiv_buy').dataset.highchartsChart,
+						chart = Highcharts.charts[index];
+
+						chart.series[0].data[0].update(int_val);
+						    
+						index = document.getElementById('myDiv_sell').dataset.highchartsChart,
+						chart1 = Highcharts.charts[index];
+
+						chart1.series[0].data[0].update(sell_val);
+						 
+          
+
+                      
+                     
+                    },
+
+
+
+                    // on error
+                error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response.responseJSON.errors)
+                    }
+			})
+		}                      
+
+</script>
+<script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+      integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+      crossorigin="anonymous"
+    ></script>
+</html>
