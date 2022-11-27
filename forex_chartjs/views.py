@@ -123,11 +123,11 @@ def get_data(request):
     result_high_low = cursor.fetchall()
 
     if currency__ != '' and interval__ == '':
-        sql_query_historical_data = "SELECT current_time_, currency, time_interval, round(actual_high::numeric, 5) as actual_high, round(actual_low::numeric, 5) as actual_low, round(predicted_high::numeric, 5) as predicted_high, round(predicted_low::numeric, 5) as predicted_low, target_datetime, datetime_hit_high, datetime_hit_low from historical_data where currency = '" + currency__ + "'"
+        sql_query_historical_data = "SELECT current_time_, currency, time_interval, round(actual_high::numeric, 5) as actual_high, round(actual_low::numeric, 5) as actual_low, round(predicted_high::numeric, 5) as predicted_high, round(predicted_low::numeric, 5) as predicted_low, target_datetime, datetime_hit_high, datetime_hit_low from historical_data where currency = '" + currency__ + "' order by current_time_ desc"
     elif currency__ != '' and interval__ != '':
-        sql_query_historical_data = "SELECT current_time_, currency, time_interval, round(actual_high::numeric, 5) as actual_high, round(actual_low::numeric, 5) as actual_low, round(predicted_high::numeric, 5) as predicted_high, round(predicted_low::numeric, 5) as predicted_low, target_datetime, datetime_hit_high, datetime_hit_low from historical_data where currency = '" + currency__ + "' and time_interval = '" + interval__ + "'"
+        sql_query_historical_data = "SELECT current_time_, currency, time_interval, round(actual_high::numeric, 5) as actual_high, round(actual_low::numeric, 5) as actual_low, round(predicted_high::numeric, 5) as predicted_high, round(predicted_low::numeric, 5) as predicted_low, target_datetime, datetime_hit_high, datetime_hit_low from historical_data where currency = '" + currency__ + "' and time_interval = '" + interval__ + "'order by current_time_ desc"
     else:
-        sql_query_historical_data = "SELECT current_time_, currency, time_interval, round(actual_high::numeric, 5) as actual_high, round(actual_low::numeric, 5) as actual_low, round(predicted_high::numeric, 5) as predicted_high, round(predicted_low::numeric, 5) as predicted_low, target_datetime, datetime_hit_high, datetime_hit_low from historical_data"
+        sql_query_historical_data = "SELECT current_time_, currency, time_interval, round(actual_high::numeric, 5) as actual_high, round(actual_low::numeric, 5) as actual_low, round(predicted_high::numeric, 5) as predicted_high, round(predicted_low::numeric, 5) as predicted_low, target_datetime, datetime_hit_high, datetime_hit_low from historical_data order by current_time_ desc"
 
     cursor.execute(sql_query_historical_data)
     result_historical = cursor.fetchall()
@@ -219,11 +219,11 @@ def get_currency(request):
 
 
     if currency__ != '' and interval__ == '':
-        sql_query_historical_data = "SELECT current_time_, currency, time_interval, round(actual_high::numeric, 5) as actual_high, round(actual_low::numeric, 5) as actual_low, round(predicted_high::numeric, 5) as predicted_high, round(predicted_low::numeric, 5) as predicted_low, target_datetime, datetime_hit_high, datetime_hit_low from historical_data where currency = '" + currency__ + "'"
+        sql_query_historical_data = "SELECT current_time_, currency, time_interval, round(actual_high::numeric, 5) as actual_high, round(actual_low::numeric, 5) as actual_low, round(predicted_high::numeric, 5) as predicted_high, round(predicted_low::numeric, 5) as predicted_low, target_datetime, datetime_hit_high, datetime_hit_low from historical_data where currency = '" + currency__ + "' order by current_time_ desc"
     elif currency__ != '' and interval__ != '':
-        sql_query_historical_data = "SELECT current_time_, currency, time_interval, round(actual_high::numeric, 5) as actual_high, round(actual_low::numeric, 5) as actual_low, round(predicted_high::numeric, 5) as predicted_high, round(predicted_low::numeric, 5) as predicted_low, target_datetime, datetime_hit_high, datetime_hit_low from historical_data where currency = '" + currency__ + "' and time_interval = '" + interval__ + "'"
+        sql_query_historical_data = "SELECT current_time_, currency, time_interval, round(actual_high::numeric, 5) as actual_high, round(actual_low::numeric, 5) as actual_low, round(predicted_high::numeric, 5) as predicted_high, round(predicted_low::numeric, 5) as predicted_low, target_datetime, datetime_hit_high, datetime_hit_low from historical_data where currency = '" + currency__ + "' and time_interval = '" + interval__ + "' order by current_time_ desc"
     else:
-        sql_query_historical_data = "SELECT current_time_, currency, time_interval, round(actual_high::numeric, 5) as actual_high, round(actual_low::numeric, 5) as actual_low, round(predicted_high::numeric, 5) as predicted_high, round(predicted_low::numeric, 5) as predicted_low, target_datetime, datetime_hit_high, datetime_hit_low from historical_data"
+        sql_query_historical_data = "SELECT current_time_, currency, time_interval, round(actual_high::numeric, 5) as actual_high, round(actual_low::numeric, 5) as actual_low, round(predicted_high::numeric, 5) as predicted_high, round(predicted_low::numeric, 5) as predicted_low, target_datetime, datetime_hit_high, datetime_hit_low from historical_data order by current_time_ desc"
 
     cursor.execute(sql_query_historical_data)
     result_historical = cursor.fetchall()
