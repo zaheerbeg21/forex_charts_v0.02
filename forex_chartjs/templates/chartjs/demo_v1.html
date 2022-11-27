@@ -37,10 +37,6 @@
         </div>
 </nav>
 <form id="refresh_data">
-<br>
-<br>
-<br>
-<br>
 <main class="col-md-12 col-sm-12 col-lg-12 col-md-12">
 <div class="row">
     <div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
@@ -87,26 +83,26 @@
           <div id = "para_current_price" class="center-text bold-text">{{current_price}}</div>
       </div>
   </div>
+</div>
 	<div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
-      <div id ="myDiv_buy" style ="width:300px; height:150px;"></div>
+      <div id ="myDiv_buy" style ="width:240px; height:150px;"></div>
    </div>
    <div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
       <div id='myDiv_sell' style="width:300px; height:150px;"></div>
    </div>
-</div>
+
 
 </main>
 
 <script> 
-   // var buy_gauge = document.getElementById("myDiv_buy");
     var chart = {      
       type: 'solidgauge'
    };
    var title = null;
    
    var pane = {
-      center: ['50%', '85%'],
-      size: '120%',
+      center: ['45%', '85%'],
+      size: '150%',
       startAngle: -90,
       endAngle: 90,
       
@@ -141,10 +137,10 @@
          y: 16
       },
       min: 0,
-      max: 200,
-      title: {
-         text: 'Buy%'
-      }
+      max: 100,
+      // title: {
+      //    text: 'Buy%'
+      // }
    };
    var plotOptions = {
       solidgauge: {
@@ -171,10 +167,10 @@
       
        
       dataLabels: {
-         format: '<div style = "text-align:center"><span style = "font-size:20px;color:' +
+         format: '<div style = "text-align:center"><span style = "font-size:22px;color:' +
             ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') +
             '">{y}</span><br/>' +
-            '<span style = "font-size:12px;color:silver">Buy%</span></div>'
+            '<span style = "font-size:12px;color:silver">Buy</span></div>'
       },
       tooltip: {
          valueSuffix: 'Buy%'
@@ -191,12 +187,7 @@
    json.series = series;     
    $('#myDiv_buy').highcharts(json);   
   </script>
-      
 
-
-    </div>
- 
-    </div>
     <script> 
          
       var chart = {      
@@ -205,8 +196,8 @@
      var title = null;
      
      var pane = {
-        center: ['50%', '85%'],
-        size: '120%',
+        center: ['30%', '85%'],
+        size: '150%',
         startAngle: -90,
         endAngle: 90,
         
@@ -241,10 +232,10 @@
            y: 16
         },
         min: 0,
-        max: 200,
-        title: {
-           text: 'Sell%'
-        }
+        max: 100,
+      //   title: {
+      //      text: 'Sell%'
+      //   }
      };
      var plotOptions = {
         solidgauge: {
@@ -272,10 +263,10 @@
         
          
         dataLabels: {
-           format: '<div style = "text-align:center"><span style = "font-size:20px;color:' +
+           format: '<div style = "text-align:center"><span style = "font-size:22px;color:' +
               ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') +
               '">{y}</span><br/>' +
-              '<span style = "font-size:12px;color:silver">Sell%</span></div>'
+              '<span style = "font-size:12px;color:silver">Sell</span></div>'
         },
         tooltip: {
            valueSuffix: 'Sell%'
@@ -295,12 +286,11 @@
 
       
     </script>
-    {% comment %} table {% endcomment %}
 
 <main class="col-md-12 ms-sm-auto col-lg-12 px-md-12">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
         <h1 class="h2">Forex Currency Prediction</h1>
-        <div class="btn-toolbar mb-2 mb-md-0"></div>
+        <div class="btn-toolbar mb-2 mb-md-0" ></div>
       </div>
     <div class="table-responsive">
     <table class="table table-striped table-sm">
@@ -334,6 +324,7 @@
       </div>
       <div class="table-responsive">
     <table class="table table-striped table-sm">
+      <div style="overflow-y:auto;">
         <thead>
         <tr>
             <th scope="col">Current Time</th>
@@ -348,6 +339,7 @@
             <th scope="col">DateTime Hit Low</th>
         </tr>
         </thead>
+
         <tbody id ="hist_tbl_body">
         {% for i in result_historical %}
         <tr>
@@ -358,6 +350,7 @@
         {% endfor %}
         </tbody>
     </table>
+   </div>
 </main>
 </form>
 
@@ -467,7 +460,6 @@ var ajaxInterval = setInterval(function(){AjaxCurrentPrice_timer()},200);
                         element.innerHTML = response.current_price;
 
                         var pred_tbl_body = document.getElementById("pred_tbl_body");
-                        console.log(response.result_high_low.length);
                         var table_data = '';
                         for(var i = 0; i < response.result_high_low.length; i++) {
                              var temp1 = "<tr><td>"+response.result_high_low[i][0]+"</td>";
@@ -543,16 +535,7 @@ var ajaxInterval = setInterval(function(){AjaxCurrentPrice_timer()},200);
 						chart1 = Highcharts.charts[index];
 
 						chart1.series[0].data[0].update(sell_val);
-						 
-          
-
-                      
-                     
                     },
-
-
-
-                    // on error
                 error: function (response) {
                         // alert the error if any error occured
                         console.log(response.responseJSON.errors)
