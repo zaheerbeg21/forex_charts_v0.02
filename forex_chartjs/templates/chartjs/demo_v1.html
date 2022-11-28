@@ -361,10 +361,11 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
         <h1 class="h2">History Prediction Table</h1>
         <div class="btn-toolbar mb-2 mb-md-0"></div>
+
       </div>
+      <div class="table-wrapper-scroll-y my-custom-scrollbar">
       <div class="table-responsive">
-    <table class="table table-striped table-sm">
-      <div style="overflow-y:auto;">
+    <table class="table table-striped table-sm"
         <thead>
         <tr>
             <th scope="col">Current Time</th>
@@ -379,7 +380,6 @@
             <th scope="col">DateTime Hit Low</th>
         </tr>
         </thead>
-
         <tbody id ="hist_tbl_body">
         {% for i in result_historical %}
         <tr>
@@ -389,6 +389,7 @@
         </tr>
         {% endfor %}
         </tbody>
+      
     </table>
    </div>
 </main>
