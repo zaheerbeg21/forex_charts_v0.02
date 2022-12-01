@@ -20,32 +20,37 @@ import json
 url = 'https://api.exchangerate.host/latest'
 SS_URL = 'https://api.exchangerate.host/latest'
 paid_api = "https://marketdata.tradermade.com/api/v1/live"
-# TradeMade_api_key = "GUW3KKLa9oV8fj3PbXvo"
-TradeMade_api_key = "51YyT5Bx34-F3XngBJhE"
+# TradeMade_api_key = "GUW3KKLa9oV8fj3PbXvo" //
+TradeMade_api_key = "51YyT5Bx34-F3XngBJhE" 
 
 def get_data_mt5(currency_name):
     if not mt5.initialize():
         print("initialize() failed, error code =", mt5.last_error())
         return None
     try:
-        utc_from = datetime.now(tz=pytz.utc) - timedelta(minutes=1)
-        utc_to = datetime.now(tz=pytz.utc)
-        ticks = mt5.copy_ticks_range(currency_name, utc_from, utc_to, mt5.COPY_TICKS_ALL)
-        ticks_frame = pd.DataFrame(ticks)
-        ticks_frame['time'] = pd.to_datetime(ticks_frame['time'], unit='s')
-        ticks_frame = ticks_frame.set_index(ticks_frame['time'])
-        data_ask = ticks_frame['ask'].resample("1s").ohlc()
-        data_bid = ticks_frame['bid'].resample("1s").ohlc()
-        data = pd.DataFrame()
-        data['open'] = (data_ask['open'] + data_bid['open']) / 2
-        data['high'] = (data_ask['high'] + data_bid['high']) / 2
-        data['low'] = (data_ask['low'] + data_bid['low']) / 2
-        data['close'] = (data_ask['close'] + data_bid['close']) / 2
-        data = data.reset_index()
-        data = data.fillna(data.mean(numeric_only=True))
-        current_value = ((ticks_frame['ask'] + ticks_frame['bid']) / 2)
-        current_price = current_value.tail(1).values[-1]
+        # utc_from = datetime.now(tz=pytz.utc) - timedelta(minutes=1)
+        # utc_to = datetime.now(tz=pytz.utc)
+        # ticks = mt5.copy_ticks_range(currency_name, utc_from, utc_to, mt5.COPY_TICKS_ALL)
+        # ticks_frame = pd.DataFrame(ticks)
+        # ticks_frame['time'] = pd.to_datetime(ticks_frame['time'], unit='s')
+        # ticks_frame = ticks_frame.set_index(ticks_frame['time'])
+        # data_ask = ticks_frame['ask'].resample("1s").ohlc()
+        # data_bid = ticks_frame['bid'].resample("1s").ohlc()
+        # data = pd.DataFrame()
+        # data['open'] = (data_ask['open'] + data_bid['open']) / 2
+        # data['high'] = (data_ask['high'] + data_bid['high']) / 2
+        # data['low'] = (data_ask['low'] + data_bid['low']) / 2
+        # data['close'] = (data_ask['close'] + data_bid['close']) / 2
+        # data = data.reset_index()
+        # data = data.fillna(data.mean(numeric_only=True))
+        # current_value = ((ticks_frame['ask'] + ticks_frame['bid']) / 2)
+        # current_price = current_value.tail(1).values[-1]
+        # current_price = round(current_price, 5)
+        ask = mt5.symbol_info_tick(currency_name).ask  
+        bid = mt5.symbol_info_tick(currency_name).bid
+        current_price = (ask + bid) / 2
         current_price = round(current_price, 5)
+        # print(current_price)
 
         return current_price
     except Exception as e:
