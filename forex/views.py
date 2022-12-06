@@ -202,8 +202,13 @@ def report_status(request, report_status_id):
     print("REPORT STATUS ID", report_status_id)
     report_status = ReportStatus.objects.get(id=report_status_id)
     report = Report.objects.get(report_status=report_status)
+    report_history_prediction = ReportHistoryPrediction.objects.filter(report_status = report_status_id)
+    # for i in report_history_prediction:
+    #     print("REPORT HIST: ", i.report_status)
+
     print(report)
     context = {
         "last_report": report,
+        "report_history_prediction": report_history_prediction,
     }
     return render(request, "report_status.html", context)

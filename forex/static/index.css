@@ -185,3 +185,12 @@ a {
     font-weight: bold;
     font-size: 18px;
 }
+
+.row{
+    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }

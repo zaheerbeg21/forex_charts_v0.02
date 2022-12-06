@@ -39,7 +39,7 @@
 <form id="refresh_data">
 <main class="col-md-12 col-sm-12 col-lg-12 col-md-12">
 <div class="row">
-    <div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
+    <!-- <div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
         <div class="form-item">
             <p class="form-heading">
                 Select Live Forex Data
@@ -50,7 +50,7 @@
               <option value="2">TradeMade</option>
             </select>
         </div>
-    </div>
+    </div> -->
     <div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
         <div class="form-item">
            <p class="form-heading"> Select Currency </p>
@@ -78,11 +78,19 @@
     <div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
       <div class="card status">
           <div class="current_price_row">
-              <div class="current_price bold-text center-text">Current Price</div>
+              <div class="current_price bold-text center-text">Ask Price</div>
           </div>
-          <div id = "para_current_price" class="center-text bold-text">{{current_price}}</div>
+          <div id = "ask_price" class="center-text bold-text">{{ask_price}}</div>
       </div>
   </div>
+  <div class="col-md-2 col-sm-2 col-lg-2 col-md-2">
+   <div class="card status">
+       <div class="current_price_row">
+           <div class="current_price bold-text center-text">Bid Price</div>
+       </div>
+       <div id = "bid_price" class="center-text bold-text">{{bid_price}}</div>
+   </div>
+</div>
 </div>
 <br>
 </main>
@@ -365,7 +373,7 @@
       </div>
       <div class="table-wrapper-scroll-y my-custom-scrollbar">
       <div class="table-responsive">
-    <table class="table table-striped table-sm"
+      <table class="table table-striped table-sm">
         <thead>
         <tr>
             <th scope="col">Current Time</th>
@@ -452,7 +460,6 @@ console.log("This is Seires change currency");
   console.log("-----"+selectedEpisode);
   params = "?currency="+selectedSeries+"&interval="+selectedEpisode;
 
-  console.log(params);
   window.location.replace(PAGE_URL+params)
 }
 
@@ -497,8 +504,11 @@ var ajaxInterval = setInterval(function(){AjaxCurrentPrice_timer()},200);
                         // document.getElementById("custom-select").value = response.method;
                          console.log("Inside Get Current price data");
 
-                        var element = document.getElementById("para_current_price");
-                        element.innerHTML = response.current_price;
+                        var element = document.getElementById("ask_price");
+                        element.innerHTML = response.ask_price;
+
+                        var bid_price = document.getElementById("bid_price");
+                        bid_price.innerHTML = response.bid_price;
 
                         var pred_tbl_body = document.getElementById("pred_tbl_body");
                         var table_data = '';
@@ -514,7 +524,8 @@ var ajaxInterval = setInterval(function(){AjaxCurrentPrice_timer()},200);
                              }
                              temp1 += "<td>"+response.result_high_low[i][3]+"</td>";
 
-                             if (response.result_high_low[i][4] == "" || response.result_high_low[i][4] == null){
+                             if (response.result_high_low[i][4] == "" || response.result_high_low[i][4] == null)
+                             {
                                 temp1 += "<td>No Data Hit</td>";
                              }
                              else
@@ -522,7 +533,8 @@ var ajaxInterval = setInterval(function(){AjaxCurrentPrice_timer()},200);
                                 temp1 += "<td>"+response.result_high_low[i][4]+"</td>";
                              }
 
-                             if (response.result_high_low[i][5] == "" || response.result_high_low[i][5] == null){
+                             if (response.result_high_low[i][5] == "" || response.result_high_low[i][5] == null)
+                             {
                                 temp1 += "<td>No Data</td>";
                              }
                              else
@@ -560,11 +572,9 @@ var ajaxInterval = setInterval(function(){AjaxCurrentPrice_timer()},200);
 						 var data_buy = response.result_buy;
 					
 						 var int_val = parseInt(data_buy, 10);
-						 console.log(int_val);
 						 data_buy = response.result_sell;
 					
 						 var sell_val = parseInt(data_buy, 10);
-						 console.log(sell_val);
 
 
 						var index = document.getElementById('myDiv_buy').dataset.highchartsChart,

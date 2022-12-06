@@ -122,6 +122,14 @@
                         <div class="status-done">Done</div>
                         <div class="status-percentage">{{ report.percentage | floatformat:"-2" }}%</div>
                     </div>
+                    <div class="report-status-row">
+                    <div class = "status-percentage">
+                        <p class="small-name">Currency:-  {{last_report.currency_id}}</p>
+                        <p class="small-name">Interval:- {{last_report.interval_id}} Minutes</p>
+                        <p class="small-name">From Date:- {{last_report.from_date|date:'d-m-Y'}}</p>
+                        <p class="small-name">To Date:- {{last_report.to_date|date:'d-m-Y'}}</p>
+                    </div>
+                    </div>
                     {% endif %}
                     {% endfor %}
                     <div class="status-date-time">{{report_status.date_time}}</div>
