@@ -17,11 +17,11 @@ import MetaTrader5 as mt5
 import pytz
 import json 
 
-url = 'https://api.exchangerate.host/latest'
-SS_URL = 'https://api.exchangerate.host/latest'
-paid_api = "https://marketdata.tradermade.com/api/v1/live"
+# url = 'https://api.exchangerate.host/latest'
+# SS_URL = 'https://api.exchangerate.host/latest'
+# paid_api = "https://marketdata.tradermade.com/api/v1/live"
 # TradeMade_api_key = "GUW3KKLa9oV8fj3PbXvo" //
-TradeMade_api_key = "51YyT5Bx34-F3XngBJhE" 
+# TradeMade_api_key = "51YyT5Bx34-F3XngBJhE" 
 
 def get_data_mt5(currency_name):
     if not mt5.initialize():
@@ -35,31 +35,13 @@ def get_data_mt5(currency_name):
 
         current_price = (ask + bid) / 2
         current_price = round(current_price, 5)
-        # print(current_price)
+        print(currency_name, ask, bid)
 
         return current_price, ask, bid
     except Exception as e:
         print("[ERROR]", e)
         return None
 
-# def free_api(currency_name):
-#     response = requests.get(SS_URL)
-#     data = response.json()
-#     currency_1 = currency_name[:3]
-#     currency_2 = currency_name[3:]
-#     current_price = data['rates'][currency_2] / data['rates'][currency_1]
-#     current_price = round(current_price, 5)
-#     return current_price
-
-# def TradeMade(currency_name):
-#     querystring = {"currency":currency_name,"api_key":TradeMade_api_key}
-#     response = requests.get(paid_api, params=querystring)
-#     data = response.json()
-#     ask_price = data['quotes'][0]['ask']
-#     bid_price = data['quotes'][0]['bid']
-#     current_price = (ask_price + bid_price)/2
-#     current_price = round(current_price, 5)
-#     return current_price
 
 def get_data(request):
     mydb = psycopg2.connect(
@@ -138,7 +120,7 @@ def get_data(request):
     }
 
     return render(request, 'chartjs/demo_v1.html', context)
-    # return render(request, context, template_name)
+
 
 def get_currency(request):
     mydb = psycopg2.connect(
@@ -158,34 +140,11 @@ def get_currency(request):
         interval__ = request.GET.get('interval')
         interval__ = interval__ + "Min"
 
-    # if request.GET.get('method_'):
-    #     method_ = request.GET.get('method_')
-
     if currency__ == '':
-        # if int(method_)== 0:
         current_price, ask_price, bid_price = get_data_mt5(currency__)
-        # ask_price = get_data_mt5(currency__)
-        # bid_price = get_data_mt5(currency__)
- 
-        # elif int(method_) == 1:
-        #     current_price = free_api(currency__)
-
-        # elif int(method_) == 2:
-        #     current_price = TradeMade(currency__)
         sql_current_price = "SELECT current_price from currency_buy_sell where currency = '" + currency + "' "
     else:
-        # if int(method_)== 0:
         current_price, ask_price, bid_price = get_data_mt5(currency__)
-        # ask_price = get_data_mt5(currency__)
-        # bid_price = get_data_mt5(currency__)
- 
-
-        # elif int(method_) == 1:
-        #     current_price = free_api(currency__)
-
-        # elif int(method_) == 2:
-        #     current_price = TradeMade(currency__)
-
         sql_current_price = "SELECT current_price from currency_buy_sell where currency = '" + currency__ + "' "
     cursor.execute(sql_current_price)
     result_current_price = cursor.fetchall()[0][0]
